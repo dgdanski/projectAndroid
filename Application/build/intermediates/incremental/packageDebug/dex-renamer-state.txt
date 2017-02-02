@@ -1,0 +1,7 @@
+#Wed Feb 01 09:52:30 CET 2017
+base.0=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_21cd52d170d51509b085d315c8129d66351e912f
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_0c16982c67d6fc24c4aa9097ac94e902ac9ef642\\classes.dex
+base.1=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_0c16982c67d6fc24c4aa9097ac94e902ac9ef642
+file.0=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_21cd52d170d51509b085d315c8129d66351e912f\\classes.dex
