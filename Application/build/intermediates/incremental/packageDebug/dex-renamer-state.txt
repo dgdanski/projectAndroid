@@ -1,4 +1,4 @@
-#Sun Feb 05 23:32:06 CET 2017
+#Sun Feb 05 23:48:18 CET 2017
 base.0=C\:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_0b77f9b8467c13a936a4474e3596e214a84a9e7f
 renamed.1=classes2.dex
 renamed.0=classes.dex

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Feb 05 23:31:59 CET 2017
+#Sun Feb 05 23:50:14 CET 2017
 210.set=ANDROID_RESOURCE
 282.file=C\:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\abc_action_mode_bar.xml
 14.set=ANDROID_RESOURCE
