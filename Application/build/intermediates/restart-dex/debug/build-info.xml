@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="armeabi-v7a,armeabi"
+    abi="arm64-v8a,armeabi-v7a,armeabi"
     api-level="23"
-    density="xxhdpi"
+    density="xxxhdpi"
     format="8"
     plugin-version="2.2.3"
-    timestamp="566155030395881"
-    token="-3588839876491730932"
-    verifier="FULL_BUILD_REQUESTED" >
+    timestamp="378357394896188"
+    token="8359794407822748308"
+    verifier="COMPATIBLE" >
 
     <task
         name="javac"
-        duration="905" />
+        duration="1094" />
     <task
         name="instant-run-dex"
-        duration="0" />
+        duration="2034" />
     <task
         name="instant-run-transform"
-        duration="985" />
+        duration="327" />
     <task
         name="verifier"
-        duration="479" />
+        duration="62" />
 
     <artifact
-        location="C:\Users\Daniel\bazowa-master\Application\build\outputs\apk\Application-debug.apk"
-        type="MAIN" />
+        location="C:\Users\Daniel\bazowa-master_z_muzyka\bazowa-master\Application\build\intermediates\reload-dex\debug\classes.dex"
+        type="RELOAD_DEX" />
 
     <build
-        timestamp="566155030395881"
+        timestamp="378226723776401"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
-            location="C:\Users\Daniel\bazowa-master\Application\build\outputs\apk\Application-debug.apk"
+            location="C:\Users\Daniel\bazowa-master_z_muzyka\bazowa-master\Application\build\outputs\apk\Application-debug.apk"
             type="MAIN" />
+    </build>
+    <build
+        timestamp="378357394896188"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\Users\Daniel\bazowa-master_z_muzyka\bazowa-master\Application\build\intermediates\reload-dex\debug\classes.dex"
+            type="RELOAD_DEX" />
     </build>
 
 </instant-run>

@@ -1,7 +1,7 @@
-#Wed Feb 01 09:52:30 CET 2017
-base.0=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_21cd52d170d51509b085d315c8129d66351e912f
+#Sun Feb 05 23:32:06 CET 2017
+base.0=C\:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_0b77f9b8467c13a936a4474e3596e214a84a9e7f
 renamed.1=classes2.dex
 renamed.0=classes.dex
-file.1=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_0c16982c67d6fc24c4aa9097ac94e902ac9ef642\\classes.dex
-base.1=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_0c16982c67d6fc24c4aa9097ac94e902ac9ef642
-file.0=C\:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_21cd52d170d51509b085d315c8129d66351e912f\\classes.dex
+file.1=C\:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_39b8f67032263cc4da7a29822dda95864f43d9e8\\classes.dex
+base.1=C\:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_39b8f67032263cc4da7a29822dda95864f43d9e8
+file.0=C\:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_0b77f9b8467c13a936a4474e3596e214a84a9e7f\\classes.dex

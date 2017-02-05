@@ -1,9 +1,5 @@
 [
     {
-        "merged": "C:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\res\\merged\\debug\\layout-w720dp-v13\\activity_main.xml",
-        "source": "C:\\Users\\Daniel\\bazowa-master\\Application\\src\\main\\res\\layout-w720dp\\activity_main.xml"
-    },
-    {
         "merged": "C:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\res\\merged\\debug\\layout-w720dp-v13\\activity_main.xml",
         "source": "C:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\src\\main\\res\\layout-w720dp\\activity_main.xml"
     }

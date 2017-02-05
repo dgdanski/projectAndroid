@@ -22,7 +22,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,11 +51,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.common.logger.Log;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import static android.R.attr.path;
 
 
 /**
@@ -63,18 +69,29 @@ public class BluetoothChatFragment extends Fragment {
 
     private static final String TAG = "BluetoothChatFragment";
 
-    public MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer = null;
+
+
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BT = 3;
 
-    // Layout Views
-    private ListView mConversationView;
-    private EditText mOutEditText;
-    private Button mSendButton;
+    boolean isPlayingSomethingElse;
 
+    // Layout Views
+//    private ListView mConversationView;
+//    private EditText mOutEditText;
+//    private Button mSendButton;
+    private Button chooseSongButton;
+    private Button playButton;
+    private Button stopButton;
+    private Button pauseButton;
+    private TextView currentActionTextView;
+
+
+    String songPath;
     /**
      * Name of the connected device
      */
@@ -162,9 +179,18 @@ public class BluetoothChatFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mConversationView = (ListView) view.findViewById(R.id.in);
-        mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
-        mSendButton = (Button) view.findViewById(R.id.button_send);
+//        mConversationView = (ListView) view.findViewById(R.id.in);
+//        mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
+//        mSendButton = (Button) view.findViewById(R.id.button_send);
+        chooseSongButton = (Button) view.findViewById(R.id.materialFilePicker);
+        chooseSongButton.getBackground().setColorFilter(0x80551a8b, PorterDuff.Mode.MULTIPLY);
+        playButton = (Button) view.findViewById(R.id.playButton);
+        playButton.getBackground().setColorFilter(0x8000FF00, PorterDuff.Mode.MULTIPLY);
+        stopButton = (Button) view.findViewById(R.id.stopButton);
+        stopButton.getBackground().setColorFilter(0x80801638, PorterDuff.Mode.MULTIPLY);
+        pauseButton = (Button) view.findViewById(R.id.pauseButton);
+        pauseButton.getBackground().setColorFilter(0x80FFFF00, PorterDuff.Mode.MULTIPLY);
+        currentActionTextView = (TextView) view.findViewById(R.id.currentAction);
     }
 
     /**
@@ -173,16 +199,20 @@ public class BluetoothChatFragment extends Fragment {
     private void setupChat() {
         Log.d(TAG, "setupChat()");
 
+        playButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        pauseButton.setEnabled(false);
+
         // Initialize the array adapter for the conversation thread
         mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
 
-        mConversationView.setAdapter(mConversationArrayAdapter);
+//        mConversationView.setAdapter(mConversationArrayAdapter);
 
         // Initialize the compose field with a listener for the return key
-        mOutEditText.setOnEditorActionListener(mWriteListener);
+//        mOutEditText.setOnEditorActionListener(mWriteListener);
 
         // Initialize the send button with a listener that for click events
-        mSendButton.setOnClickListener(new View.OnClickListener() {
+        /*mSendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
                 View view = getView();
@@ -192,6 +222,58 @@ public class BluetoothChatFragment extends Fragment {
                     sendMessage(message);
                 }
             }
+        });*/
+
+        chooseSongButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                View view = getView();
+                if (null != view) {
+                    new MaterialFilePicker()
+                            .withActivity(getActivity())
+                            .withRequestCode(1)
+                            .withFilter(Pattern.compile(".*\\.mp3$")) // Filtering files and directories by file name using regexp
+//                    .withFilterDirectories(true) // Set directories filterable (false by default)
+                            .withHiddenFiles(true) // Show hidden files and folders
+                            .start();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        playButton.setEnabled(true);
+                    }
+                }, 200);
+
+            }
+        });
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                View view = getView();
+                if (null != view) {
+                    sendMessage("#songPath#" + MainActivity.filePath);
+//                    Toast.makeText(getActivity(), "#songPath#" + MainActivity.filePath, Toast.LENGTH_LONG).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendMessage("play");
+                        }
+                    }, 500);
+
+                }
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                View view = getView();
+                if (null != view) {
+                    sendMessage("stop");
+                }
+
+            }
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
@@ -199,6 +281,23 @@ public class BluetoothChatFragment extends Fragment {
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
+
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                View view = getView();
+                if (null != view) {
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendMessage("pause");
+                        }
+                    }, 1);
+
+                }
+            }
+        });
     }
 
     /**
@@ -236,17 +335,63 @@ public class BluetoothChatFragment extends Fragment {
 
 
             if(message.equals("play")) {
+                currentActionTextView.setText("PLAY");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), R.raw.arctic);
-                        mediaPlayer.start();
+                        playButton.setEnabled(false);
+                        stopButton.setEnabled(true);
+                        pauseButton.setEnabled(true);
+//                        chooseSongButton.setEnabled(false);
+                       /* mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(MainActivity.filePath));
+                        if(mediaPlayer.isPlaying()){
+                            mediaPlayer.stop();
+                            mediaPlayer.release();
+
+                            mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(MainActivity.filePath));
+                            mediaPlayer.start();
+                        }else {
+                            mediaPlayer.start();
+                        }*/
+
+
+                        isPlayingSomethingElse = false;
+                        if(mediaPlayer == null){
+                            mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(MainActivity.filePath));
+                            mediaPlayer.start();
+                            isPlayingSomethingElse = true;
+                        }
+
+                        if(mediaPlayer.isPlaying() && isPlayingSomethingElse == false) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                    mediaPlayer = null;
+
+                                    mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(MainActivity.filePath));
+                                    mediaPlayer.start();
+                                }
+                            }, 200);
+
+                        }
+                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                sendMessage("stop");
+                            }
+                        });
+
                     }
-                }, 100);
-            }
+                }, 1);
+            }else if(message.equals("stop")) {
+                playButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                pauseButton.setEnabled(false);
+                chooseSongButton.setEnabled(true);
 
-            if(message.equals("stop")) {
-
+                currentActionTextView.setText("STOP");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -255,48 +400,35 @@ public class BluetoothChatFragment extends Fragment {
                         mediaPlayer = null;
                     }
                 }, 112);
-            }
-            List<AudioModel> lista = getAllAudioFromDevice(getActivity().getApplicationContext());
-            Log.d("111111111111: ", "przed forem");
+            }else if(message.equals("pause")) {
+                playButton.setEnabled(false);
+                stopButton.setEnabled(true);
 
-            if(lista == null) {
-                Log.d("111111111111: ", "lista jest nullem");
-            }else if(lista != null){
-                Log.d("111111111111: ", "lista nie jest nullem");
-            }
 
-            for(AudioModel model : lista) {
-                Log.d("Sciezki: ", model.getaPath());
-                Log.d("Sciezki: ", model.getaName());
-                Log.d("Sciezki: ", model.getaArtist());
 
+                        if(mediaPlayer.isPlaying()){
+                            currentActionTextView.setText("PAUSE");
+                            mediaPlayer.pause();
+                        } else {
+                            currentActionTextView.setText("PLAY");
+                            mediaPlayer.start();
+                        }
 
             }
-            Log.d("111111111111: ", "po forze");
 
-            ArrayList<HashMap<String,String>> songList=getPlayList("/storage/emulated/0/Music/Coma-New");
 
-//            ArrayList<HashMap<String,String>> songList=getPlayList(Environment.getExternalStorageDirectory().getAbsolutePath());
 
-            if(songList!=null){
-                for(int i=0;i<songList.size();i++){
-                    String fileName=songList.get(i).get("file_name");
-                    String filePath=songList.get(i).get("file_path");
-                    //here you will get list of file name and file path that present in your device
-                    Log.d("file details "," name ="+fileName +" path = "+filePath);
-                }
-                Toast.makeText(getActivity(), "songlist zawiera piosenki", Toast.LENGTH_LONG).show();
-
-            }else {
-                Toast.makeText(getActivity(), "songlist jest nullem", Toast.LENGTH_LONG).show();
-                for(int i=0;i<20;i++){
-                    Log.d("file details ","111111111111111111111111111111111");
-                }
-            }
+//            new MaterialFilePicker()
+//                    .withActivity(getActivity())
+//                    .withRequestCode(1)
+//                    .withFilter(Pattern.compile(".*\\.mp3$")) // Filtering files and directories by file name using regexp
+////                    .withFilterDirectories(true) // Set directories filterable (false by default)
+//                    .withHiddenFiles(true) // Show hidden files and folders
+//                    .start();
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
-            mOutEditText.setText(mOutStringBuffer);
+//            mOutEditText.setText(mOutStringBuffer);
         }
     }
 
@@ -383,19 +515,66 @@ public class BluetoothChatFragment extends Fragment {
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
-                    if(readMessage.equals("cos"))   Toast.makeText(getActivity(), "odebralem " + readMessage, Toast.LENGTH_SHORT).show();
+//                    if(readMessage.equals("cos"))   Toast.makeText(getActivity(), "odebralem " + readMessage, Toast.LENGTH_SHORT).show();
                     //Toast.makeText(getActivity(), readMessage, Toast.LENGTH_SHORT).show();
                     if(readMessage.equals("play")) {
+                        currentActionTextView.setText("PLAY");
+
+                        playButton.setEnabled(false);
+                        stopButton.setEnabled(true);
+                        pauseButton.setEnabled(true);
+//                        chooseSongButton.setEnabled(false);
+
+//                        mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), R.raw.arctic);
+
+//                        mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(songPath));
+                        isPlayingSomethingElse = false;
+                        if(mediaPlayer == null){
+                            mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(MainActivity.filePath));
+                            mediaPlayer.start();
+                            isPlayingSomethingElse = true;
+                        }
+
+                        //dzięki temu ifowi i fladze isPlayingSomethingElse mogę w trakcie wybrać sobie inną piosenkę
+                        //i ją uruchomić
+                        if(mediaPlayer.isPlaying() && isPlayingSomethingElse == false) {
+                            mediaPlayer.stop();
+                            mediaPlayer.release();
+                            mediaPlayer = null;
+
+                            mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(MainActivity.filePath));
+                            mediaPlayer.start();
+                        }
 
 
-                        mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), R.raw.arctic);
-                        mediaPlayer.start();
-                    }
 
-                    if(readMessage.equals("stop")) {
+//                        mediaPlayer.start();
+                    }else if(readMessage.contains("#songPath#")){
+//                        Toast.makeText(getActivity(), "#songPath#", Toast.LENGTH_LONG).show();
+                        songPath = readMessage.replace("#songPath#", "");
+                        MainActivity.filePath = songPath;
+
+
+                    }else if(readMessage.equals("stop")) {
+                        currentActionTextView.setText("STOP");
                         mediaPlayer.stop();
                         mediaPlayer.release();
                         mediaPlayer = null;
+
+                        playButton.setEnabled(true);
+                        stopButton.setEnabled(false);
+                        pauseButton.setEnabled(false);
+                        chooseSongButton.setEnabled(true);
+                    }else if(readMessage.equals("pause")){
+                        playButton.setEnabled(false);
+                        stopButton.setEnabled(true);
+                        if(mediaPlayer.isPlaying()){
+                            currentActionTextView.setText("PAUSE");
+                            mediaPlayer.pause();
+                        } else {
+                            currentActionTextView.setText("PLAY");
+                            mediaPlayer.start();
+                        }
                     }
 
                     break;
@@ -476,12 +655,12 @@ public class BluetoothChatFragment extends Fragment {
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
                 return true;
             }
-            case R.id.insecure_connect_scan: {
+            /*case R.id.insecure_connect_scan: {
                 // Launch the DeviceListActivity to see devices and do scan
                 Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
                 return true;
-            }
+            }*/
             case R.id.discoverable: {
                 // Ensure this device is discoverable by others
                 ensureDiscoverable();
@@ -491,68 +670,6 @@ public class BluetoothChatFragment extends Fragment {
         return false;
     }
 
-    ArrayList<HashMap<String,String>> getPlayList(String rootPath) {
 
-        ArrayList<HashMap<String,String>> fileList = new ArrayList<>();
-        try {
-            File rootFolder = new File(rootPath);
-            File[] files = rootFolder.listFiles(); //here you will get NPE if directory doesn't contains  any file,handle it like this.
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    if (getPlayList(file.getAbsolutePath()) != null) {
-                        fileList.addAll(getPlayList(file.getAbsolutePath()));
-                    } else {
-                        break;
-                    }
-                } else if (file.getName().endsWith(".mp3")) {
-                    HashMap<String, String> song = new HashMap<>();
-                    song.put("file_path", file.getAbsolutePath());
-                    song.put("file_name", file.getName());
-                    fileList.add(song);
-                }
-            }
-            return fileList;
-        } catch (Exception e) {
-            Log.d("blad", e.toString());
-            return null;
-        }
-    }
-
-    public List<AudioModel> getAllAudioFromDevice(final Context context) {
-
-        final List<AudioModel> tempAudioList = new ArrayList<>();
-
-//        Uri uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
-//        Uri uri = Uri.parse(Environment.DIRECTORY_MUSIC);
-        Uri uri = Uri.parse("/storage/emulated/0/Music/Coma-New");
-        String[] projection = {MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.ALBUM, MediaStore.Audio.ArtistColumns.ARTIST,};
-        //Cursor c = context.getContentResolver().query(uri, projection, MediaStore.Audio.Media.DATA + " like ? ", new String[]{"%yourFolderName%"}, null);
-        Cursor c = context.getContentResolver().query(uri, projection, null, null, null);
-
-        if (c != null) {
-            while (c.moveToNext()) {
-
-                AudioModel audioModel = new AudioModel();
-                String path = c.getString(0);
-                String album = c.getString(1);
-                String artist = c.getString(2);
-
-                String name = path.substring(path.lastIndexOf("/") + 1);
-
-                audioModel.setaName(name);
-                audioModel.setaAlbum(album);
-                audioModel.setaArtist(artist);
-                audioModel.setaPath(path);
-
-                Log.e("Name :" + name, " Album :" + album);
-                Log.e("Path :" + path, " Artist :" + artist);
-
-                tempAudioList.add(audioModel);
-            }
-            c.close();
-        }
-
-        return tempAudioList;
-    }
 
 }

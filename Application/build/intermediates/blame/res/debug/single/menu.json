@@ -1,18 +1,10 @@
 [
     {
-        "merged": "C:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\res\\merged\\debug\\menu\\main.xml",
-        "source": "C:\\Users\\Daniel\\bazowa-master\\Application\\src\\main\\res\\menu\\main.xml"
-    },
-    {
         "merged": "C:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\res\\merged\\debug\\menu\\main.xml",
         "source": "C:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\src\\main\\res\\menu\\main.xml"
     },
     {
         "merged": "C:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\build\\intermediates\\res\\merged\\debug\\menu\\bluetooth_chat.xml",
         "source": "C:\\Users\\Daniel\\bazowa-master_z_muzyka\\bazowa-master\\Application\\src\\main\\res\\menu\\bluetooth_chat.xml"
-    },
-    {
-        "merged": "C:\\Users\\Daniel\\bazowa-master\\Application\\build\\intermediates\\res\\merged\\debug\\menu\\bluetooth_chat.xml",
-        "source": "C:\\Users\\Daniel\\bazowa-master\\Application\\src\\main\\res\\menu\\bluetooth_chat.xml"
     }
 ]
